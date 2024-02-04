@@ -1,10 +1,19 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Switch,
+  Button,
+  TextInput,
+} from 'react-native';
 import React, {useState} from 'react';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
-import * as yup from 'yup';
-
-const passwordschema = yup.object().shape({
-  passwordlength: yup.number().min(4).required().max(16),
+const passwordschema = Yup.object().shape({
+  passwordlength: Yup.number().min(4).required().max(16),
 });
 
 export default function App() {
@@ -51,9 +60,94 @@ export default function App() {
   };
 
   return (
-    <View>
-      <Text>App Testning</Text>
-    </View>
+    <ScrollView keyboardShouldPersistTaps="handled">
+      <SafeAreaView>
+        <view>
+          <Text> Password Generator</Text>
+        </view>
+        <Formik
+          initialValues={{passwordlength: ''}}
+          validationSchema={passwordschema}
+          onSubmit={values => {
+            generatepassword(Number(values.passwordlength));
+          }}>
+          {({
+            values,
+            errors,
+            touched,
+            isValid,
+
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            handleReset,
+          }) => (
+            <>
+              <View>
+                <Text>Enter the length of password</Text>
+                <TextInput
+                  // name="passwordlength"
+                  onChangeText={handleChange('passwordlength')}
+                  onBlur={handleBlur('passwordlength')}
+                  value={values.passwordlength}
+                  keyboardType="numeric"
+                />
+                {errors.passwordlength && touched.passwordlength && (
+                  <Text style={{fontSize: 10, color: 'red'}}>
+                    {errors.passwordlength}
+                  </Text>
+                )}
+              </View>
+              <View>
+                <Text>Include Numbers</Text>
+                <Switch
+                  value={numbers}
+                  onValueChange={setNumbers}
+                  style={{marginBottom: 10}}
+                />
+              </View>
+              <View>
+                <Text>Include Symbols</Text>
+                <Switch
+                  value={symbols}
+                  onValueChange={setSymbols}
+                  style={{marginBottom: 10}}
+                />
+              </View>
+              <View>
+                <Text>Include Lowercase</Text>
+                <Switch
+                  value={lowercase}
+                  onValueChange={setlowercase}
+                  style={{marginBottom: 10}}
+                />
+              </View>
+              <View>
+                <Text>Include Uppercase</Text>
+                <Switch
+                  value={uppercase}
+                  onValueChange={setuppercase}
+                  style={{marginBottom: 10}}
+                />
+              </View>
+              <View>
+                <Button
+                  // onPress={handleSubmit}
+                  title="Generate Password"
+                  disabled={!isValid}
+                />
+              </View>
+              <View>
+                <Button onPress={resetpassword} title="Reset" />
+              </View>
+              <View>
+                <Text>{ispassgenerated ? password : ''}</Text>
+              </View>
+            </>
+          )}
+        </Formik>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 
