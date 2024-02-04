@@ -16,13 +16,43 @@ export default function App() {
   const [lowercase, setlowercase] = useState(false);
   const [uppercase, setuppercase] = useState(false);
 
-  const generatepassword = (passwordlength: Number) => {};
-  const createpasswor = (charector: string, passwordlength: Number) => {};
-  const resetpassword = () => {};
+  const generatepassword = (passwordlength: number) => {
+    let charaterkey = '';
+    const uppercasechar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowercasechar = 'abcdefghijklmnopqrstuvwxyz';
+    const numberschar = '0123456789';
+    const symbolschar = '!@#$%^&*()_+';
+    if (numbers) charaterkey += numberschar;
+    if (symbols) charaterkey += symbolschar;
+    if (lowercase) charaterkey += lowercasechar;
+    if (uppercase) charaterkey += uppercasechar;
+    const password = createpasswor(charaterkey, passwordlength);
+    setPassword(password);
+    setisGenerated(true);
+    // return password;
+  };
+  const createpasswor = (charector: string, passwordlength: number) => {
+    let res = '';
+    for (let i = 0; i < passwordlength; i++) {
+      const charindex = Math.random() * charector.length;
+      charector.charAt(charindex);
+      res += charector.charAt(charindex);
+    }
+    return res;
+  };
+  const resetpassword = () => {
+    setPassword('');
+    setisGenerated(false);
+    setNumbers(false);
+    setSymbols(false);
+    setlowercase(false);
+    setuppercase(false);
+    return;
+  };
 
   return (
     <View>
-      <Text>App</Text>
+      <Text>App Testning</Text>
     </View>
   );
 }
